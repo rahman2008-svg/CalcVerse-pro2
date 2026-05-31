@@ -1,0 +1,6 @@
+{
+  "name": "CalcVerse Pro",
+  "description": "A modern, all-in-one calculator application featuring 18 calculation engines, modern Material Design 3, dynamic theme engines, and history tracking.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
