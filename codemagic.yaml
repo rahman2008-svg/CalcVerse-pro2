@@ -1,24 +1,19 @@
-workflows:
-  android-native-build:
-    name: CalcVerse Debug Build
-    max_build_duration: 60
-    instance_type: mac_mini_m1
+scripts:
 
-    environment:
-      java: 17
+  - name: Create debug keystore (FIX)
+    script: |
+      mkdir -p ~/.android
+      keytool -genkey -v \
+        -keystore ~/.android/debug.keystore \
+        -storepass android \
+        -alias androiddebugkey \
+        -keypass android \
+        -keyalg RSA \
+        -keysize 2048 \
+        -validity 10000 \
+        -dname "CN=Android,O=Android,C=US"
 
-    scripts:
-      - name: Fix gradlew
-        script: chmod +x ./gradlew
-
-      - name: Setup local.properties
-        script: echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
-
-      - name: Clean
-        script: ./gradlew clean
-
-      - name: Build Debug APK (NO SIGNING)
-        script: ./gradlew assembleDebug -x test --no-daemon
-
-    artifacts:
-      - app/build/outputs/apk/debug/*.apk
+  - name: Link debug keystore
+    script: |
+      mkdir -p /Users/builder/clone
+      cp ~/.android/debug.keystore /Users/builder/clone/debug.keystore
