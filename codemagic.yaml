@@ -1,17 +1,26 @@
 workflows:
   android-native-build:
-    name: CalcVerse Pro Stable Build
+    name: CalcVerse Pro SAFE BUILD
     max_build_duration: 60
     instance_type: mac_mini_m1
 
     environment:
       java: 17
+      android_signing: []   # ❌ IMPORTANT: disable signing completely
+      vars:
+        PACKAGE_NAME: "com.aistudio.calcversepro.whpdmq"
+
+    triggering:
+      events:
+        - push
+      branch_patterns:
+        - pattern: main
+          include: true
 
     scripts:
-
       - name: Fix gradlew permission
         script: |
-          chmod +x ./gradlew
+          chmod +x gradlew
 
       - name: Setup local.properties
         script: |
@@ -21,9 +30,12 @@ workflows:
         script: |
           ./gradlew clean --no-daemon
 
-      - name: Build Debug APK (SAFE MODE)
+      - name: Build Debug APK (NO SIGNING)
         script: |
-          ./gradlew assembleDebug --no-daemon -x test -x validateSigningDebug
+          ./gradlew assembleDebug --no-daemon \
+          -x validateSigningDebug \
+          -x signDebugBundle \
+          -x packageDebug
 
     artifacts:
-      - app/build/outputs/apk/debug/*.apk
+      - app/build/outputs/apk/debug/app-debug.apk
