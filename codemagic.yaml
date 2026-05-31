@@ -6,7 +6,10 @@ workflows:
 
     environment:
       java: 17
-      android_signing: []   # ❌ IMPORTANT: disable signing completely
+
+      # ⚠️ IMPORTANT: remove android_signing completely
+      # (do NOT add empty list)
+
       vars:
         PACKAGE_NAME: "com.aistudio.calcversepro.whpdmq"
 
@@ -30,12 +33,12 @@ workflows:
         script: |
           ./gradlew clean --no-daemon
 
-      - name: Build Debug APK (NO SIGNING)
+      - name: Build Debug APK (NO SIGNING FIX)
         script: |
           ./gradlew assembleDebug --no-daemon \
           -x validateSigningDebug \
-          -x signDebugBundle \
-          -x packageDebug
+          -x packageDebug \
+          -x signDebugBundle
 
     artifacts:
       - app/build/outputs/apk/debug/app-debug.apk
