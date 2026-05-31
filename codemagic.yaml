@@ -1,34 +1,12 @@
-workflows:
-  android-native-build:
-    name: CalcVerse Pro 2 Debug Build
-    max_build_duration: 60
-    instance_type: mac_mini_m1
+scripts:
+  - name: Make gradlew executable
+    script: chmod +x gradlew
 
-    environment:
-      java: 17
-      groups:
-        - default
+  - name: Setup local.properties
+    script: echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
 
-    scripts:
-      - name: Make gradlew executable
-        script: chmod +x gradlew
+  - name: Clean build
+    script: ./gradlew clean --no-daemon
 
-      - name: Setup local.properties
-        script: echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
-
-      - name: Clean project
-        script: ./gradlew clean --no-daemon
-
-      - name: Build Debug APK
-        script: ./gradlew assembleDebug --no-daemon
-
-    artifacts:
-      - app/build/outputs/apk/debug/app-debug.apk
-
-    publishing:
-      email:
-        recipients:
-          - prince.ar.abdur.rahman2008@gmail.com
-        notify:
-          success: true
-          failure: true
+  - name: Build APK
+    script: ./gradlew assembleDebug --no-daemon
