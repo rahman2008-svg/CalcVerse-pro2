@@ -1,6 +1,6 @@
 workflows:
   android-native-build:
-    name: CalcVerse Pro CI Build
+    name: CalcVerse Pro SAFE BUILD
     max_build_duration: 60
     instance_type: mac_mini_m1
 
@@ -16,16 +16,20 @@ workflows:
 
     scripts:
       - name: Fix gradlew permission
-        script: chmod +x gradlew
+        script: |
+          chmod +x gradlew
 
       - name: Setup local.properties
-        script: echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
+        script: |
+          echo "sdk.dir=$ANDROID_SDK_ROOT" > local.properties
 
       - name: Clean project
-        script: ./gradlew clean --no-daemon
+        script: |
+          ./gradlew clean --no-daemon
 
       - name: Build Debug APK
-        script: ./gradlew assembleDebug --no-daemon
+        script: |
+          ./gradlew assembleDebug --no-daemon
 
     artifacts:
       - app/build/outputs/apk/debug/**/*.apk
